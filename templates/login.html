@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/login.css">
+
+     <!-- 为使用方便，直接使用jquery.js库，如您代码中不需要，可以去掉 -->
+    <script src="http://code.jquery.com/jquery-1.12.3.min.js"></script>
+    <!-- 引入封装了failback的接口--initGeetest -->
+    <script src="http://static.geetest.com/static/tools/gt.js"></script>
+</head>
+<body>
+<div id="head">
+    <div>欢迎登录</div>
+</div>
+<div class="container">
+
+    <div class="row " id="firstdiv">
+        <div class="col-md-8">
+            <img src="/static/img/km.jpg" alt="" id="km">
+        </div>
+        <div class="col-md-4 pull-right" id="logindiv">
+            <h3 class="login_text">用户登录</h3>
+            <form>
+                {% csrf_token %}
+                <div class="form-group  out_div">
+                    <label class="control-label" for="username">用户名</label>
+                    <input type="text" class="form-control input_class" id="username" name="user"
+                           aria-describedby="helpBlock2">
+                    <span id="helpBlock1" class="help-block hide"></span>
+                </div>
+                <div class="form-group  out_div">
+                    <label class="control-label" for="pwd">密码</label>
+                    <input type="text" class="form-control input_class" id="password" name="pwd">
+                    <span id="helpBlock2" class="help-block hide"></span>
+                </div>
+
+{#                <div class="form-group  out_div">#}
+{#                    <div class="row ">#}
+{#                        <div class="col-md-6 valid">#}
+{#                            <label class="control-label" for="valid_Code">验证码</label>#}
+{#                            <input type="text" id="valid_Code" class="form-control " name="valid_Code">#}
+{#                        </div>#}
+{##}
+{#                        <div class="col-md-6 validate">#}
+{#                            <img src="/get_valid_Code_img/" id="valid_img" alt="">#}
+{#                        </div>#}
+{#                    </div>#}
+{##}
+{##}
+{#                </div>#}
+                <button type="button" id="sub_btn" class="btn btn-primary">登录</button>
+                <span id="error" style="color: red"></span>
+                <div id="popup-captcha"></div>
+            </form>
+
+            <p>还没有账号去<a href="/reg/" style="color: #31b0d5">注册</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                忘记密码?<a href="/researchPassword/" style="color: #31b0d5">找回密码</a></p>
+
+            <p>{{ msg }}</p>
+        </div>
+    </div>
+</div>
+</body>
+<script src="/static/jquery-3.2.1.min.js"></script>
+{#图片验证码先登录#}
+{#<script>#}
+{#    $(function () {#}
+{#        $("#sub_btn").click(function () {#}
+{#            function foo() {#}
+{#                $('#error').html('')#}
+{#            }#}
+{##}
+{#            var last_url = document.referrer;#}
+{#            $.ajax({#}
+{#                url: '/login/',#}
+{#                type: 'POST',#}
+{#                data: {#}
+{#                    name: $("#username").val(),#}
+{#                    pwd: $('#pwd').val(),#}
+{#                    valid_Code: $("#valid_Code").val(),#}
+{#                    csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()#}
+{#                },#}
+{#                success: function (data) {#}
+{#                    data = JSON.parse(data);#}
+{#                    if (!data['flag']) {#}
+{#                        $("#error").html(data["msg"]);#}
+{#                        setTimeout(foo, 3000)#}
+{#                    } else {#}
+{#                        if (last_url) {#}
+{#                            if (last_url.slice(-5) == "/reg/"|last_url.slice(-16)=="/changePassword/" ) {#}
+{#                                window.location.href = "/"#}
+{#                            }else {#}
+{##}
+{#                                window.location.href = last_url#}
+{#                            }#}
+{#                        } else {#}
+{#                            window.location.href = "/"#}
+{#                        }#}
+{##}
+{#                    }#}
+{#                }#}
+{#            })#}
+{#        });#}
+{##}
+{#        $('#valid_img').click(function () {#}
+{#            $(this)[0].src += '?'#}
+{#        });#}
+{#    })#}
+{#</script>#}
+
+
+<script>
+     function foo() {
+                $('#error').html('')
+            }
+
+    var handlerPopup = function (captchaObj) {
+        // 成功的回调
+        captchaObj.onSuccess(function () {
+            var validate = captchaObj.getValidate();
+              var last_url = document.referrer;
+            $.ajax({
+                url: "/pc-geetest/ajax_validate", // 进行二次验证
+                type: "post",
+                dataType: "json",
+                data: {
+                    username: $('#username').val(),
+                    password: $('#password').val(),
+                    csrfmiddlewaretoken:$("[name='csrfmiddlewaretoken']").val(),
+                    geetest_challenge: validate.geetest_challenge,
+                    geetest_validate: validate.geetest_validate,
+                    geetest_seccode: validate.geetest_seccode
+                },
+                success: function (data) {
+
+                console.log(data);
+                    if (!data['is_login']) {
+                        $("#error").html(data["error_msg"]);
+                        setTimeout(foo, 3000)
+                    } else {
+                        if (last_url) {
+                            if (last_url.slice(-5) == "/reg/"|last_url.slice(-16)=="/changePassword/" ) {
+                                window.location.href = "/"
+                            }else {
+
+                                window.location.href = last_url
+                            }
+                        } else {
+                            window.location.href = "/index/"
+                        }
+
+                    }
+
+                }
+            });
+        });
+        $("#sub_btn").click(function () {
+            captchaObj.show();
+        });
+        // 将验证码加到id为captcha的元素里
+        captchaObj.appendTo("#popup-captcha");
+        // 更多接口参考：http://www.geetest.com/install/sections/idx-client-sdk.html
+    };
+    // 验证开始需要向网站主后台获取id，challenge，success（是否启用failback）
+    $.ajax({
+        url: "/pc-geetest/register?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        type: "get",
+        dataType: "json",
+        success: function (data) {
+            // 使用initGeetest接口
+            // 参数1：配置参数
+            // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
+            initGeetest({
+                gt: data.gt,
+                challenge: data.challenge,
+                product: "popup", // 产品形式，包括：float，embed，popup。注意只对PC版验证码有效
+                offline: !data.success // 表示用户后台检测极验服务器是否宕机，一般不需要关注
+                // 更多配置参数请参见：http://www.geetest.com/install/sections/idx-client-sdk.html#config
+            }, handlerPopup);
+        }
+    });
+</script>
+
+</html>

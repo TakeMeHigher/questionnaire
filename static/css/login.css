@@ -1,0 +1,38 @@
+#firstdiv {
+    margin-top: 20px;
+}
+
+#sub_btn {
+    width: 360px
+}
+
+.login_text {
+    text-align: center;
+    color: #31b0d5;
+}
+
+#valid_img {
+    height: 34px;
+    width: 165px;
+    margin-top: 25px;
+}
+
+#km {
+    width: 650px;
+    height: 450px;
+}
+
+#logindiv {
+    margin-top: 40px;
+}
+
+#head {
+    width: 100%;
+    height: 100px;
+    background-color: #2aabd2;
+    margin-top: 0;
+    font-size: 24px;
+    color: white;
+    text-align: center;
+    line-height: 100px;
+}

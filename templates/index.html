@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    {% load myFilter %}
+    <style>
+
+     .hide{
+         display: none;
+     }
+
+           ol {
+            padding: 0;
+            list-style: none;
+            counter-reset: sectioncounter
+        }
+
+        ol > li:before {
+            content: '问题' counter(sectioncounter) ':';
+            counter-increment: sectioncounter;
+            font-size: 18px;
+            color: #d4d4d4;
+        }
+
+        ol > li :nth-of-type(odd) {
+            background-color: #f9f9f9;
+        }
+    </style>
+
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div id="left_head">
+                CRM系统
+            </div>
+        </div>
+
+        <div class="col-md-9" style="padding:0">
+            <div id="head" >
+                <div>
+                    <span></span>
+                </div>
+            </div>
+        {% block content%}
+            <div id="tip">
+
+            </div>
+
+
+            <div id="content_body" style="margin-right: 20px">
+                <div class="row my-table-tool">
+                    <div class="col-md-11">
+                        <a href="/addQuestionSuv/">
+                            <button class="btn btn-success" data-toggle="modal" data-target="#myModal">添加</button>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div class="table-responsive table-bordered">
+                    <table id="t1" class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox"></th>
+                            <th>问卷调查名称</th>
+                            <th>问卷调查班级</th>
+                            <th>参与人数</th>
+                            <th>问卷选项</th>
+                            <th>调查地址</th>
+                            <th>查看评分</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            {% for questionSuv in questionSuvs %}
+                              <tr>
+                              <td><input type="checkbox"></td>
+                              <td>{{questionSuv.title  }}</td>
+                              <td>{{ questionSuv.classobj.title}}</td>
+                              <td>
+                                  {{questionSuv.answer_set.all|stu_count }}/{{ questionSuv.classobj.student_set.count}}</td>
+                              <td><a href="/editQuestionSuv/{{questionSuv.id}}/">编辑问卷</a></td>
+
+                              <td><a href="/student/evaluate/{{questionSuv.id }}/{{ questionSuv.classobj.id }}/">/student/evaluate/{{questionSuv.id }}/{{ questionSuv.classobj.id }}</a></td>
+                              <td><a href="">查看评分</a></td>
+                              <td><a href="">删除</a></td>
+                              </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        {% endblock content %}
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+</html>

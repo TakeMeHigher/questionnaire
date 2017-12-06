@@ -1,0 +1,54 @@
+/**
+导航条
+*/
+.navbar-fixed-top{
+    height: 50px;
+    background-color: #2b669a;
+}
+
+ .panel-default >.panel-heading{
+     font-size: 18px;
+ }
+
+
+ a{
+     text-decoration: none;
+ }
+#top-login {
+    color: white;
+    margin-right: 15px;
+    margin-top: 15px;
+}
+
+
+/**左侧*/
+
+#left_head{
+    background-color: #2b669a;
+    color: white;
+    font-size: 24px;
+    font-family: Dialog;
+}
+/**右侧*/
+
+#head{
+    height: 50px;
+    background-color: #2e6da4;
+}
+
+#tip{
+    height: 35px;
+    background-color:lightgray ;
+}
+
+#content_body{
+    margin-top: 50px;
+}
+
+#rowContent{
+    margin-top: 100px;
+}
+
+#id_option_ids{
+    padding-top: 90px;
+}

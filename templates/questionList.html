@@ -1,0 +1,129 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+    <div id="tip">
+        编辑调查问卷
+    </div>
+
+    <div class="row" style="margin-top: 10px;margin-right: 20px">
+        <div style="height: 40px">
+            <div class="pull-right">
+                <button class="btn btn-info" id="add_btn">添加</button>
+                <button class="btn btn-primary">保存</button>
+            </div>
+        </div>
+
+        <div>
+
+            <div style="margin-left: 15px" >
+                <ol id="question_list">
+                    {% for foo in tem %}
+                        <li style="min-height: 140px">
+                            <div style="margin-left: 80px" class="question_obj" fk="{{ foo.question.id }}">
+
+                                <div class="form-group">
+                                    <label for="Name" class="col-sm-2 control-label">问题:</label>
+                                    <div class="col-sm-10">
+                                        {{ foo.form.title }}
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="" class="col-sm-2 control-label">类型:</label>
+                                    <div class="col-sm-10">
+                                        {{ foo.form.type }}
+                                        <a href="" class="{{ foo.option_class }}">
+                                            <span class="glyphicon glyphicon-plus">添加选项</span></a>
+
+                                        <ul style="padding-left: 0">
+                                            {% for option in foo.options %}
+                                               <li id="{{ option.option.id }}" style="display:inline-block">{{ option.form }}</li> <a href="" class="option_del"><span class="glyphicon glyphicon-remove "></span></a> <br>
+                                            {% endfor %}
+
+                                        </ul>
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+                        </li>
+                        <a  class="pull-right question_del" style="margin-top: -150px"><span class="glyphicon glyphicon-remove"></span></a>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/jquery-3.2.1.min.js"></script>
+
+    <script>
+        $("#question_list").on("change", ".type", function () {
+            var value = $(this).children("option:selected").val()
+            if ($(this).children) {
+
+            }
+        })
+    </script>
+
+     <script>
+        $("#add_btn").click(function () {
+            var count = $(".question_count").last().html();
+            count = parseInt(count) + 1;
+            var s = '<li style="min-height: 140px">\n' +
+                '                            <div style="margin-left: 80px" class="question_obj">\n' +
+                '\n' +
+                '                                <div class="form-group">\n' +
+                '                                    <label for="Name" class="col-sm-2 control-label">问题:</label>\n' +
+                '                                    <div class="col-sm-10">\n' +
+                '                                        <textarea name="title" cols="40" rows="10" class="question_title" style="width:600px;height:40px" maxlength="32" required="" id="id_title"></textarea>\n' +
+                '                                    </div>\n' +
+                '                                </div>\n' +
+                '\n' +
+                '                                <div class="form-group">\n' +
+                '                                    <label for="" class="col-sm-2 control-label">类型:</label>\n' +
+                '                                    <div class="col-sm-10">\n' +
+                '                                        <select name="type" class="type" style="width:300px;height:30px" required="" id="id_type">\n' +
+                '  <option value="">---------</option>\n' +
+                '\n' +
+                '  <option value="1">单选</option>\n' +
+                '\n' +
+                '  <option value="2" >打分</option>\n' +
+                '\n' +
+                '  <option value="3">建议</option>\n' +
+                '\n' +
+                '</select>\n' +
+                '                                        <a href="" class="hide">\n' +
+                '                                            <span class="glyphicon glyphicon-plus">添加选项</span></a>\n' +
+                '\n' +
+                '                                        <ul style="padding-left: 0">\n' +
+                '                                            \n' +
+                '\n' +
+                '                                        </ul>\n' +
+                '                                    </div>\n' +
+                '\n' +
+                '\n' +
+                '                                </div>\n' +
+                '\n' +
+                '\n' +
+                '                            </div>\n' +
+                '                        </li> <a  class="pull-right question_del" style="margin-top: -150px"><span class="glyphicon glyphicon-remove"></span></a>';
+
+            $("#question_list").append(s)
+        });
+
+        $(".type").change(function () {
+            alert(123)
+        })
+    </script>
+
+    <script>
+       $("#question_list").on("click",".question_del",function () {
+           $(this).prev().remove()
+       })
+    </script>
+{% endblock content %}
+
+
