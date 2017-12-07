@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^login/$', views.login),
     url(r'^addQuestionSuv/$', views.addQuestionSuv),
     url(r'^editQuestionSuv/(?P<questionSuv_id>\d+)/$', views.editQuestionSuv),
+    url(r'^save/QuestionSuv//$', views.saveQuestionSuv),
 
     # 滑动验证码配置
 

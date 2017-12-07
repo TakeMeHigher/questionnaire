@@ -106,3 +106,5 @@ def editQuestionSuv(request,questionSuv_id):
    return render(request,"questionList.html",{"tem":inner()})
 
 
+def saveQuestionSuv(request):
+    pass

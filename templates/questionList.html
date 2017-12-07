@@ -10,17 +10,18 @@
         <div style="height: 40px">
             <div class="pull-right">
                 <button class="btn btn-info" id="add_btn">添加</button>
-                <button class="btn btn-primary">保存</button>
+                <button class="btn btn-primary" id="save_btn">保存</button>
             </div>
         </div>
 
         <div>
 
-            <div style="margin-left: 15px" >
+            <div style="margin-left: 15px">
                 <ol id="question_list">
                     {% for foo in tem %}
-                        <li style="min-height: 140px">
-                            <div style="margin-left: 80px" class="question_obj" fk="{{ foo.question.id }}">
+                        <li style="min-height:25%" class="question_obj" fk="{{ foo.question.id }}">
+                            <a class="pull-right question_del"><span class="glyphicon glyphicon-remove"></span></a>
+                            <div style="margin-left: 80px" >
 
                                 <div class="form-group">
                                     <label for="Name" class="col-sm-2 control-label">问题:</label>
@@ -33,12 +34,15 @@
                                     <label for="" class="col-sm-2 control-label">类型:</label>
                                     <div class="col-sm-10">
                                         {{ foo.form.type }}
-                                        <a href="" class="{{ foo.option_class }}">
+                                        <a class="{{ foo.option_class }} add_option">
                                             <span class="glyphicon glyphicon-plus">添加选项</span></a>
 
-                                        <ul style="padding-left: 0">
+                                        <ul style="padding-left: 0" class="optionObj">
                                             {% for option in foo.options %}
-                                               <li id="{{ option.option.id }}" style="display:inline-block">{{ option.form }}</li> <a href="" class="option_del"><span class="glyphicon glyphicon-remove "></span></a> <br>
+                                                <li id="{{ option.option.id }}"
+                                                    style="display:inline-block">{{ option.form }}</li>
+                                                <a class="option_del"><span class="glyphicon glyphicon-remove "></span></a>
+                                                <br>
                                             {% endfor %}
 
                                         </ul>
@@ -49,8 +53,9 @@
 
 
                             </div>
+
                         </li>
-                        <a  class="pull-right question_del" style="margin-top: -150px"><span class="glyphicon glyphicon-remove"></span></a>
+
                     {% endfor %}
                 </ol>
             </div>
@@ -60,15 +65,59 @@
     <script src="/static/jquery-3.2.1.min.js"></script>
 
     <script>
+        //选择类型
         $("#question_list").on("change", ".type", function () {
-            var value = $(this).children("option:selected").val()
-            if ($(this).children) {
 
+            var value = $(this).children("option:selected").val();
+
+            if (value == 1) {
+
+                var s = '<select name="type" class="type" style="width:300px;height:30px" required="" id="id_type">\n' +
+                    '  <option value="">---------</option>\n' +
+                    '\n' +
+                    '  <option value="1">单选</option>\n' +
+                    '\n' +
+                    '  <option value="2" >打分</option>\n' +
+                    '\n' +
+                    '  <option value="3">建议</option>\n' +
+                    '\n' +
+                    '</select><a  class=""><span class="glyphicon glyphicon-plus add_option">添加选项</span></a><ul style="padding-left: 0">\n' +
+                    '                                            \n' +
+                    '                                               <li id="1" style="display:inline-block"><label for="id_title">选项名称:</label><input type="text" name="title" value="" maxlength="32" required="" id="id_title">\n' +
+                    '<label for="id_value">选项所对应的分值:</label><input type="text" name="value" value="" required="" id="id_value"></li> <a href="" class="option_del"><span class="glyphicon glyphicon-remove "></span></a> <br>\n' +
+                    '                                            \n' +
+                    '                                               <li id="2" style="display:inline-block"><label for="id_title">选项名称:</label><input type="text" name="title" value="" maxlength="32" required="" id="id_title">\n' +
+                    '<label for="id_value">选项所对应的分值:</label><input type="text" name="value" value="" required="" id="id_value"></li> <a  class="option_del"><span class="glyphicon glyphicon-remove "></span></a> <br>\n' +
+                    '                                            \n' +
+                    '\n' +
+                    '                                        </ul>';
+
+                $(this).parent().html(s)
+
+
+            } else {
+                html = '<select name="type" class="type" style="width:300px;height:30px" required="" id="id_type">\n' +
+                    '  <option value="">---------</option>\n' +
+                    '\n' +
+                    '  <option value="1">单选</option>\n' +
+                    '\n' +
+                    '  <option value="2" selected="">打分</option>\n' +
+                    '\n' +
+                    '  <option value="3">建议</option>\n' +
+                    '\n' +
+                    '</select><a href="" class="hide"><span class="glyphicon glyphicon-plus add_option">添加选项</span></a>' +
+                    '<ul style="padding-left: 0">\n' +
+                    '                                            \n' +
+                    '\n' +
+                    '                                        </ul>';
+
+                $(this).parent().html(html)
             }
         })
     </script>
 
-     <script>
+    <script>
+        //添加问题
         $("#add_btn").click(function () {
             var count = $(".question_count").last().html();
             count = parseInt(count) + 1;
@@ -98,7 +147,7 @@
                 '                                        <a href="" class="hide">\n' +
                 '                                            <span class="glyphicon glyphicon-plus">添加选项</span></a>\n' +
                 '\n' +
-                '                                        <ul style="padding-left: 0">\n' +
+                '                                        <ul style="padding-left: 0" class="optionObj">\n' +
                 '                                            \n' +
                 '\n' +
                 '                                        </ul>\n' +
@@ -114,15 +163,70 @@
             $("#question_list").append(s)
         });
 
-        $(".type").change(function () {
-            alert(123)
+        //删除问题
+        $("#question_list").on("click", ".question_del", function () {
+            $(this).parent().remove()
+
+        });
+
+
+    </script>
+
+    <script>
+
+        //添加选项
+        $("#question_list").on("click", ".add_option", function () {
+            s = '<li id="" style="display:inline-block">' +
+                '<label for="id_title">选项名称:</label>' +
+                '<input type="text" name="title" value="" maxlength="32" required="" id="id_title">\n' +
+                '<label for="id_value">选项所对应的分值:</label>' +
+                '<input type="text" name="value" value="" required="" id="id_value">' +
+                '</li><a  class="option_del"><span class="glyphicon glyphicon-remove "></span></a>';
+
+            $(this).next("ul").append(s);
+            $(".question_del")
+        });
+
+        //删除选项
+        $("#question_list").on("click", ".option_del", function () {
+            $(this).prev().remove();
+            $(this).next().remove();
+            $(this).remove();
         })
     </script>
 
     <script>
-       $("#question_list").on("click",".question_del",function () {
-           $(this).prev().remove()
-       })
+        question_list = [];
+        $(".question_obj").each(function () {
+            qid=$(this).attr("fk");
+            qtitle=$(this).find(".question_title").val();
+            qtype=$(this).find(".type").val();
+            optionObj=$(this).find(".optionObj");
+            lis=optionObj.children("li");
+            options=[];
+             for(var i=0;i<lis.length;i++){
+                 $li=$(lis[i]);
+                 oid=$li.attr("id");
+                 otitle=$li.find("[name='title']").val();
+                 ovalue=$li.find("[name='value']").val();
+             }
+            question_list.push({"qid":qid,"qtitle":qtitle,"qtype":qtype,"options":options})
+        });
+
+        $("#save_btn").click(function () {
+             $.ajax({
+                 url:"/save/QuestionSuv/",
+                 type:"post",
+                 headers: {"X-CSRFToken": $.cookie('csrftoken')},
+                 contentType:"json",
+                 data:JSON.stringify({
+                     "question_list":question_list
+                 }),
+                 success:function (data) {
+
+                 }
+             })
+        });
     </script>
 {% endblock content %}
 
