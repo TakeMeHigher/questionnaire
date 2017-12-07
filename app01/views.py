@@ -77,7 +77,7 @@ def addQuestionSuv(request):
     return render(request,"addQuestionSuv.html",{"classlist":classlist})
 
 
-
+#编辑问题 传值
 def editQuestionSuv(request,questionSuv_id):
    def inner():
        questions=models.Question.objects.filter(questionSuv__id=questionSuv_id).all()
@@ -103,8 +103,56 @@ def editQuestionSuv(request,questionSuv_id):
                    tem["options"]=inner_option(question)
                yield tem
 
-   return render(request,"questionList.html",{"tem":inner()})
+   return render(request,"questionList.html",{"tem":inner(),"questionSuv_id":questionSuv_id})
 
-
+#保存
 def saveQuestionSuv(request):
-    pass
+    question_list=request.body
+    question_list=question_list.decode("utf-8")
+    question_list=json.loads(question_list)
+    print(question_list)
+
+    question_l=question_list.get("question_list")
+    questionSuv_id=question_list.get('questionSuv_id')
+    qid_l=[]
+    for question in question_l:
+        qid=question.get('qid')
+        qtitle=question.get('qtitle')
+        qtype=question.get('qtype')
+        options=question.get('options')
+        if qid != None:
+            qid_l.append(int(qid))
+        if not qid:
+            question=models.Question.objects.create(title=qtitle,type=qtype)
+            question.questionSuv.add(questionSuv_id)
+            qid_l.append(question.id)
+            if options:
+                for option in options:
+                    oid = option.get('oid')
+                    otitle = option.get('otitle')
+                    ovalue = option.get('ovalue')
+                    models.Option.objects.create(title=otitle,value=ovalue,question=question)
+        else:
+            models.Question.objects.filter(id=qid).update(title=qtitle,type=qtype)
+            if options:
+                for option in options:
+                    oid = option.get('oid')
+                    otitle = option.get('otitle')
+                    ovalue = option.get('ovalue')
+                    if not oid:
+                        models.Option.objects.create(title=otitle, value=ovalue, question_id=qid)
+                    else:
+                        models.Option.objects.filter(id=oid).update(title=otitle, value=ovalue)
+    model_question_ids=[]
+    questions=models.Question.objects.all()
+    for question in questions:
+        model_question_ids.append(question.id)
+
+
+
+
+    l=list(set(model_question_ids).difference(qid_l))
+    for id in l:
+        models.Question.objects.filter(id=id).delete()
+
+    return HttpResponse("ok")

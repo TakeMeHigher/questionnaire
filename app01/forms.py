@@ -48,7 +48,7 @@ class OptionModelForm(ModelForm):
 
         widgets={
             "title":wd.TextInput(),
-            "value":wd.TextInput(),
+
         }
 
 

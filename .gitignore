@@ -1,0 +1,8 @@
+*.py[cod]
+*.so
+*.eggs/
+eggs/
+*$py.class
+.idea
+*.egg
+.idea
