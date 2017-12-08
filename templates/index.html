@@ -57,12 +57,14 @@
 
             <div id="content_body" style="margin-right: 20px">
                 <div class="row my-table-tool">
+                    {% if request.session.user.id %}
                     <div class="col-md-11">
                         <a href="/addQuestionSuv/">
                             <button class="btn btn-success" data-toggle="modal" data-target="#myModal">添加</button>
                         </a>
 
                     </div>
+                     {% endif %}
                 </div>
 
                 <div class="table-responsive table-bordered">
@@ -73,10 +75,16 @@
                             <th>问卷调查名称</th>
                             <th>问卷调查班级</th>
                             <th>参与人数</th>
+                            {% if requestion.session.user.id %}
                             <th>问卷选项</th>
+                            {% endif %}
+
                             <th>调查地址</th>
                             <th>查看评分</th>
+                            {% if request.session.user.id %}
                             <th>操作</th>
+                            {% endif %}
+
                         </tr>
                         </thead>
                         <tbody id="tbody">
@@ -87,11 +95,17 @@
                               <td>{{ questionSuv.classobj.title}}</td>
                               <td>
                                   {{questionSuv.answer_set.all|stu_count }}/{{ questionSuv.classobj.student_set.count}}</td>
-                              <td><a href="/editQuestionSuv/{{questionSuv.id}}/">编辑问卷</a></td>
+
+                              {% if request.session.user.id %}
+                               <td><a href="/editQuestionSuv/{{questionSuv.id}}/">编辑问卷</a></td>
+                              {% endif %}
+
 
                               <td><a href="/student/evaluate/{{questionSuv.id }}/{{ questionSuv.classobj.id }}/">/student/evaluate/{{questionSuv.id }}/{{ questionSuv.classobj.id }}</a></td>
                               <td><a href="">查看评分</a></td>
+                              {% if request.session.user.id %}
                               <td><a href="">删除</a></td>
+                              {% endif %}
                               </tr>
                             {% endfor %}
 

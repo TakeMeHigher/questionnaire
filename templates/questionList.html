@@ -19,7 +19,7 @@
             <div style="margin-left: 15px">
                 <ol id="question_list">
                     {% for foo in tem %}
-                        <li style="min-height:25%" class="question_obj" fk="{{ foo.question.id }}">
+                        <li style="height: 200px" class="question_obj" fk="{{ foo.question.id }}">
                             <a class="pull-right question_del"><span class="glyphicon glyphicon-remove"></span></a>
                             <div style="margin-left: 80px">
 
@@ -98,7 +98,7 @@
         $("#add_btn").click(function () {
             var count = $(".question_count").last().html();
             count = parseInt(count) + 1;
-            var s = '<li style="min-height: 140px">\n' +
+            var s = '<li style="height:200px" class="question_obj"><a  class="pull-right question_del" style="margin-top: "><span class="glyphicon glyphicon-remove"></span></a> \n' +
                 '                            <div style="margin-left: 80px" class="question_obj">\n' +
                 '\n' +
                 '                                <div class="form-group">\n' +
@@ -135,7 +135,7 @@
                 '\n' +
                 '\n' +
                 '                            </div>\n' +
-                '                        </li> <a  class="pull-right question_del" style="margin-top: -150px"><span class="glyphicon glyphicon-remove"></span></a>';
+                '                        </li>';
 
             $("#question_list").append(s)
         });
@@ -183,7 +183,6 @@
                 qid = $(this).attr("fk");
                 qtitle = $(this).find(".question_title").val();
                 qtype = $(this).find(".type").val();
-
                 optionObj = $(this).find(".optionObj");
                 lis = optionObj.children("li");
                 options = [];
